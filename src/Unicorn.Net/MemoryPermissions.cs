@@ -1,4 +1,5 @@
 ﻿using System;
+using Unicorn.Internal;
 
 namespace Unicorn
 {
@@ -6,31 +7,31 @@ namespace Unicorn
     /// Defines memory region permissions.
     /// </summary>
     [Flags]
-    public enum MemoryPermissions
+    public enum MemoryPermissions : uint
     {
         /// <summary>
         /// No permission.
         /// </summary>
-        None = 0,
+        None = uc_prot.UC_PROT_NONE,
 
         /// <summary>
         /// Read permission.
         /// </summary>
-        Read = 1,
+        Read = uc_prot.UC_PROT_READ,
 
         /// <summary>
         /// Write permission.
         /// </summary>
-        Write = 2,
+        Write = uc_prot.UC_PROT_WRITE,
 
         /// <summary>
         /// Execute permission.
         /// </summary>
-        Execute = 4,
+        Execute = uc_prot.UC_PROT_EXEC,
 
         /// <summary>
         /// All permission.
         /// </summary>
-        All = Read | Write | Execute
+        All = uc_prot.UC_PROT_ALL
     }
 }

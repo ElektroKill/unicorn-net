@@ -31,7 +31,7 @@ namespace Unicorn.Net.Samples.Shellcode
             using (var emulator = new X86Emulator(X86Mode.b32))
             {
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 emulator.Registers.ESP = (long)esp;
 
@@ -49,7 +49,7 @@ namespace Unicorn.Net.Samples.Shellcode
         }
 
         // hook_intr
-        private static void HookInterrupt(Emulator emulator, int into, object userData)
+        private static void HookInterrupt(Emulator emulator, uint into, object userData)
         {
             var registers = ((X86Emulator)emulator).Registers;
             var buffer = new byte[256];
@@ -76,7 +76,7 @@ namespace Unicorn.Net.Samples.Shellcode
                     var edx = registers.EDX;
 
                     var count = buffer.Length < edx ? buffer.Length : (int)edx;
-                    emulator.Memory.Read((ulong)ecx, buffer, count);
+                    emulator.Memory.Read((ulong)ecx, buffer, (uint)count);
 
                     // >>> 0x%x: interrupt 0x%x, SYS_WRITE. buffer = 0x%x, size = %u, content = '%s'\n
                     //   r_eip, intno, r_ecx, r_edx, buffer
@@ -86,13 +86,13 @@ namespace Unicorn.Net.Samples.Shellcode
         }
 
         // hook_code
-        private static void HookCode(Emulator emulator, ulong address, int size, object userData)
+        private static void HookCode(Emulator emulator, ulong address, uint size, object userData)
         {
             Console.WriteLine($"Tracing instruction at 0x{address.ToString("x2")}, instruction size = 0x{size.ToString("x2")}");
 
             var tmp = new byte[16];
             var eip = ((X86Emulator)emulator).Registers.EIP;
-            var count = tmp.Length < size ? tmp.Length : size; // MIN
+            uint count = ((uint)tmp.Length) < size ? (uint)tmp.Length : size; // MIN
 
             Console.Write($"*** EIP = {eip.ToString("x2")} ***: ");
 

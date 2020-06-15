@@ -12,7 +12,7 @@ namespace Unicorn
     /// <param name="address">Address where the code is being executed.</param>
     /// <param name="size">Size of the block.</param>
     /// <param name="userToken">Object associated with the callback.</param>
-    public delegate void BlockHookCallback(Emulator emulator, ulong address, int size, object userToken);
+    public delegate void BlockHookCallback(Emulator emulator, ulong address, uint size, object userToken);
 
     /// <summary>
     /// Represents hooks for basic block of an <see cref="Emulator"/>.

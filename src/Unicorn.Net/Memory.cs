@@ -40,11 +40,11 @@ namespace Unicorn
         /// 
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public int PageSize
+        public UIntPtr PageSize
         {
             get
             {
-                int size = 0;
+                UIntPtr size = UIntPtr.Zero;
                 _emulator.ThrowIfDisposed();
                 _emulator.Bindings.Query(_emulator.Handle, UnicornQueryType.PageSize, ref size);
                 return size;
@@ -63,22 +63,31 @@ namespace Unicorn
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> is less than 0.</exception>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Map(ulong address, int size, MemoryPermissions permissions)
+        public void Map(ulong address, UIntPtr size, MemoryPermissions permissions)
         {
             _emulator.ThrowIfDisposed();
 
             if ((address & (ulong)PageSize) != 0)
                 throw new ArgumentException("Address must be aligned with page size.", nameof(address));
-            if ((size & PageSize) != 0)
+            if ((size.ToUInt64() & PageSize.ToUInt64()) != 0)
                 throw new ArgumentException("Size must be a multiple of page size.", nameof(size));
-
+            /*
             if (size < 0)
                 throw new ArgumentOutOfRangeException(nameof(size), "Size must be non-negative.");
+            */
+
             if (permissions > MemoryPermissions.All)
                 throw new ArgumentException("Permissions is invalid.", nameof(permissions));
 
+            
            _emulator.Bindings.MemMap(_emulator.Handle, address, size, permissions);
         }
+
+        public void Map(ulong address, uint size, MemoryPermissions permissions)
+            => Map(address, new UIntPtr(size), permissions);
+
+        public void Map(ulong address, ulong size, MemoryPermissions permissions)
+            => Map(address, new UIntPtr(size), permissions);
 
         /// <summary>
         /// Unmaps a region of memory used for emulation with the specified starting address and size.
@@ -91,20 +100,28 @@ namespace Unicorn
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> is less than 0.</exception>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Unmap(ulong address, int size)
+        public void Unmap(ulong address, UIntPtr size)
         {
             _emulator.ThrowIfDisposed();
 
             if ((address & (ulong)PageSize) != (ulong)PageSize)
                 throw new ArgumentException("Address must be aligned with page size.", nameof(address));
-            if ((size & PageSize) != PageSize)
+            if ((size.ToUInt64() & PageSize.ToUInt64()) != PageSize.ToUInt64())
                 throw new ArgumentException("Size must be a multiple of page size.", nameof(size));
 
-            if (size < 0)
+            /*
+            if (size.ToUInt64() < 0)
                 throw new ArgumentOutOfRangeException(nameof(size), "Size must be non-negative.");
+            */
 
             _emulator.Bindings.MemUnmap(_emulator.Handle, address, size);
         }
+
+        public void Unmap(ulong address, uint size)
+            => Unmap(address, new UIntPtr(size));
+
+        public void Unmap(ulong address, ulong size)
+            => Unmap(address, new UIntPtr(size));
 
         /// <summary>
         /// Sets permissions for a region of memory with the specified starting address, size and <see cref="MemoryPermissions"/>.
@@ -118,22 +135,31 @@ namespace Unicorn
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> is less than 0.</exception>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Protect(ulong address, int size, MemoryPermissions permissions)
+        public void Protect(ulong address, UIntPtr size, MemoryPermissions permissions)
         {
             _emulator.ThrowIfDisposed();
 
             if ((address & (ulong)PageSize) != (ulong)PageSize)
                 throw new ArgumentException("Address must be aligned with page size.", nameof(address));
-            if ((size & PageSize) != PageSize)
+            if ((size.ToUInt64() & PageSize.ToUInt64()) != PageSize.ToUInt64())
                 throw new ArgumentException("Size must be a multiple of page size.", nameof(size));
 
-            if (size < 0)
+            /*
+            if (size.ToUInt64() < 0)
                 throw new ArgumentOutOfRangeException(nameof(size), "Size must be non-negative.");
+            */
+
             if (permissions > MemoryPermissions.All)
                 throw new ArgumentException("Permissions is invalid.", nameof(permissions));
 
             _emulator.Bindings.MemProtect(_emulator.Handle, address, size, permissions);
         }
+
+        public void Protect(ulong address, uint size, MemoryPermissions permissions) 
+            => Protect(address, new UIntPtr(size), permissions);
+
+        public void Protect(ulong address, ulong size, MemoryPermissions permissions)
+            => Protect(address, new UIntPtr(size), permissions);
 
         /// <summary>
         /// Writes the specified buffer to the specified memory address.
@@ -146,17 +172,23 @@ namespace Unicorn
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than 0 or greater than the length of <paramref name="buffer"/>.</exception>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Write(ulong address, byte[] buffer, int count)
+        public void Write(ulong address, byte[] buffer, UIntPtr count)
         {
             _emulator.ThrowIfDisposed();
 
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
-            if (count < 0 || count > buffer.Length)
+
+            if (/* count.ToUInt64() < 0 || */ count.ToUInt64() > (ulong)buffer.LongLength)
                 throw new ArgumentOutOfRangeException(nameof(count), "Count must be non-negative and less or equal to the length of data.");
 
             _emulator.Bindings.MemWrite(_emulator.Handle, address, buffer, count);
         }
+
+        public void Write(ulong address, byte[] buffer, uint count) 
+            => Write(address, buffer, new UIntPtr(count));
+        public void Write(ulong address, byte[] buffer, ulong count) 
+            => Write(address, buffer, new UIntPtr(count));
 
         /// <summary>
         /// Reads data at the specified address to the specified buffer.
@@ -169,16 +201,23 @@ namespace Unicorn
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than 0 or greater than the length of <paramref name="buffer"/>.</exception>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="Binds.UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Read(ulong address, byte[] buffer, int count)
+        public void Read(ulong address, byte[] buffer, UIntPtr count)
         {
             _emulator.ThrowIfDisposed();
 
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
-            if (count < 0 || count > buffer.Length)
+
+            if (/* count < 0 || */ count.ToUInt64() > (ulong)buffer.LongLength)
                 throw new ArgumentOutOfRangeException(nameof(count), "Count must be non-negative and less or equal to the length of data.");
 
             _emulator.Bindings.MemRead(_emulator.Handle, address, buffer, count);
         }
+
+        public void Read(ulong address, byte[] buffer, uint count) 
+            => Read(address, buffer, new UIntPtr(count));
+
+        public void Read(ulong address, byte[] buffer, ulong count)
+            => Read(address, buffer, new UIntPtr(count));
     }
 }

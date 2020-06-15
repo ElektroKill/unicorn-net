@@ -28,7 +28,7 @@ namespace Unicorn.Net.Samples.X86
                 // Map 2MB of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
                 // Write machine code to be emulated.
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 // Initialize registers.
                 emulator.Registers.ECX = 0x1234;
@@ -75,7 +75,7 @@ namespace Unicorn.Net.Samples.X86
                 // Map 2MB of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
                 // Write machine code to be emulated.
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 // Initialize registers.
                 emulator.Registers.ECX = 0x1234;
@@ -95,14 +95,14 @@ namespace Unicorn.Net.Samples.X86
                 var buffer = new byte[4];
                 var tmp = 0;
 
-                emulator.Memory.Read(0xAAAAAAAA, buffer, buffer.Length);
+                emulator.Memory.Read(0xAAAAAAAA, buffer, (uint)buffer.Length);
                 tmp = BitConverter.ToInt32(buffer, 0);
 
                 Console.WriteLine($">>> Read 4 bytes from [0x{0xAAAAAAAA.ToString("x2")}] = 0x{tmp.ToString("x2")}");
 
                 try
                 {
-                    emulator.Memory.Read(0xFFFFFFAA, buffer, buffer.Length);
+                    emulator.Memory.Read(0xFFFFFFAA, buffer, (uint)buffer.Length);
                     tmp = BitConverter.ToInt32(buffer, 0);
                     Console.WriteLine($">>> Read 4 bytes from [0x{0xFFFFFFAA.ToString("x2")}] = 0x{tmp.ToString("x2")}");
                 }
@@ -130,7 +130,7 @@ namespace Unicorn.Net.Samples.X86
                 // Map 8KB of memory for emulation.
                 emulator.Memory.Map(addr, 8 * 1024, MemoryPermissions.All);
                 // Write machine code to emulate.
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 // Initialize registers.
                 emulator.Registers.EAX = 1;
@@ -182,7 +182,7 @@ namespace Unicorn.Net.Samples.X86
                 // Map 2MB of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
                 // Write machine code to be emulated.
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 // Initialize registers.
                 emulator.Registers.ECX = 0x1234;
@@ -226,7 +226,7 @@ namespace Unicorn.Net.Samples.X86
                 // Map 2MB of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
                 // Write machine code to be emulated.
-                emulator.Memory.Write(addr, code, code.Length);
+                emulator.Memory.Write(addr, code, (uint)code.Length);
 
                 // Initialize registers.
                 emulator.Registers.ECX = 0x1234;
@@ -242,7 +242,7 @@ namespace Unicorn.Net.Samples.X86
         }
 
         // hook_code
-        public static void CodeHook(Emulator emulator, ulong address, int size, object userData)
+        public static void CodeHook(Emulator emulator, ulong address, uint size, object userData)
         {
             var eflags = ((X86Emulator)emulator).Registers.EFLAGS;
 
@@ -251,13 +251,13 @@ namespace Unicorn.Net.Samples.X86
         }
 
         // hook_block
-        private static void BlockHook(Emulator emulator, ulong address, int size, object userData)
+        private static void BlockHook(Emulator emulator, ulong address, uint size, object userData)
         {
             Console.WriteLine($">>> Tracing basic block at 0x{address.ToString("x2")}, block size = 0x{size.ToString("x2")}");
         }
 
         // hook_out
-        private static void HookOut(Emulator emulator, int port, int size, int value, object userData)
+        private static void HookOut(Emulator emulator, uint port, int size, uint value, object userData)
         {
             var registers = ((X86Emulator)emulator).Registers;
             var eip = registers.EIP;
@@ -284,7 +284,7 @@ namespace Unicorn.Net.Samples.X86
         }
 
         // hook_in
-        private static int HookIn(Emulator emulator, int port, int size, object userData)
+        private static uint HookIn(Emulator emulator, uint port, int size, object userData)
         {
             var eip = ((X86Emulator)emulator).Registers.EIP;
             Console.WriteLine($">>> --- Reading from port 0x{port.ToString("x2")}, size: {size}, address: 0x{eip.ToString("x2")}");
@@ -303,7 +303,7 @@ namespace Unicorn.Net.Samples.X86
         }
 
         // hook_mem_invalid
-        private static bool InvalidMemoryHook(Emulator emulator, MemoryType type, ulong address, int size, ulong value, object userData)
+        private static bool InvalidMemoryHook(Emulator emulator, MemoryType type, ulong address, int size, long value, object userData)
         {
             switch (type)
             {

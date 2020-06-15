@@ -7,8 +7,8 @@
     {
         static UnicornVersion()
         {
-            var mmajor = 0;
-            var mminor = 0;
+            uint mmajor = 0;
+            uint mminor = 0;
 
             var nativeVersion = Bindings.Instance.Version(ref mmajor, ref mminor);
             var major = nativeVersion >> 0x8;

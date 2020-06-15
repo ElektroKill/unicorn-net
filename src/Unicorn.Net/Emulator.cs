@@ -154,30 +154,36 @@ namespace Unicorn
         /// Starts emulation at the specified begin address and end address.
         /// </summary>
         /// <param name="begin">Address at which to begin emulation.</param>
-        /// <param name="end">Address at which to end emulation.</param>
+        /// <param name="until">Address at which to end emulation.</param>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Start(ulong begin, ulong end)
+        public void Start(ulong begin, ulong until)
         {
             ThrowIfDisposed();
-            Bindings.EmuStart(Handle, begin, end, 0, 0);
+            Bindings.EmuStart(Handle, begin, until, 0, UIntPtr.Zero);
         }
 
         /// <summary>
         /// Starts emulation at the specified begin address, end address, timeout and number of instructions to execute.
         /// </summary>
         /// <param name="begin">Address at which to begin emulation.</param>
-        /// <param name="end">Address at which to end emulation.</param>
+        /// <param name="until">Address at which to end emulation.</param>
         /// <param name="timeout">Duration to run emulation.</param>
         /// <param name="count">Number of instructions to execute.</param>
         /// <exception cref="UnicornException">Unicorn did not return <see cref="UnicornError.Ok"/>.</exception>
         /// <exception cref="ObjectDisposedException"><see cref="Emulator"/> instance is disposed.</exception>
-        public void Start(ulong begin, ulong end, TimeSpan timeout, int count)
+        public void Start(ulong begin, ulong until, TimeSpan timeout, UIntPtr count)
         {
             ThrowIfDisposed();
             var microSeconds = (ulong)Math.Round(timeout.TotalMilliseconds * 1000);
-            Bindings.EmuStart(Handle, begin, end, microSeconds, count);
+            Bindings.EmuStart(Handle, begin, until, microSeconds, count);
         }
+
+        public void Start(ulong begin, ulong until, TimeSpan timeout, uint count) 
+            => Start(begin, until, timeout, new UIntPtr(count));
+
+        public void Start(ulong begin, ulong until, TimeSpan timeout, ulong count)
+            => Start(begin, until, timeout, new UIntPtr(count));
 
         /// <summary>
         /// Stops the emulation.
@@ -222,10 +228,28 @@ namespace Unicorn
             _disposed = true;
         }
 
+        internal void RegRead(int regId, ref int value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
         internal void RegRead(int regId, ref long value)
             => Bindings.RegRead(Handle, regId, ref value);
 
+        internal void RegRead(int regId, ref float value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
+        internal void RegRead(int regId, ref double value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
+        internal void RegWrite(int regId, ref int value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
         internal void RegWrite(int regId, ref long value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
+        internal void RegWrite(int regId, ref float value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
+        internal void RegWrite(int regId, ref double value)
             => Bindings.RegWrite(Handle, regId, ref value);
 
         internal void ThrowIfDisposed()

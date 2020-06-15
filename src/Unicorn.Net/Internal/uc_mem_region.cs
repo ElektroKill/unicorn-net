@@ -7,6 +7,6 @@ namespace Unicorn.Internal
     {
         public ulong begin;
         public ulong end;
-        public ulong perms;
+        public uint perms;
     }
 }

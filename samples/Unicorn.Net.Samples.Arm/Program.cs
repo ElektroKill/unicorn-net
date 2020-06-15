@@ -6,12 +6,12 @@ namespace Unicorn.Net.Samples.Arm
     // Similar to sample_arm.c
     public class Program
     {
-        public static void HookBlock(Emulator emu, ulong address, int size, object userToken)
+        public static void HookBlock(Emulator emu, ulong address, uint size, object userToken)
         {
             Console.WriteLine($">>> Tracing basic block at 0x{address.ToString("x2")}, block size = 0x{size.ToString("x2")}");
         }
 
-        public static void HookCode(Emulator emu, ulong address, int size, object userToken)
+        public static void HookCode(Emulator emu, ulong address, uint size, object userToken)
         {
             Console.WriteLine($">>> Tracing instruction at 0x{address.ToString("x2")}, instruction size = 0x{size.ToString("x2")}");
         }
@@ -33,7 +33,7 @@ namespace Unicorn.Net.Samples.Arm
 
                 // Map 2mb of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
-                emulator.Memory.Write(addr, armcode, armcode.Length);
+                emulator.Memory.Write(addr, armcode, (ulong)armcode.Length);
 
                 emulator.Registers.R0 = 0x1234;
                 emulator.Registers.R2 = 0x6789;
@@ -67,7 +67,7 @@ namespace Unicorn.Net.Samples.Arm
 
                 // Map 2mb of memory.
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
-                emulator.Memory.Write(addr, armcode, armcode.Length);
+                emulator.Memory.Write(addr, armcode, (uint)armcode.Length);
 
                 emulator.Registers.SP = 0x1234;
 

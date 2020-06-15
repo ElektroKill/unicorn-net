@@ -11,5 +11,6 @@
         UC_ARCH_PPC,        // PowerPC architecture (currently unsupported)
         UC_ARCH_SPARC,      // Sparc architecture
         UC_ARCH_M68K,       // M68K architecture
+        UC_ARCH_MAX
     }
 }

@@ -34,6 +34,19 @@ namespace Unicorn
         ARMv8 = uc_mode.UC_MODE_V8,
 
         /// <summary>
+        /// ARM926 CPU type
+        /// </summary>
+        ARM926 = uc_mode.UC_MODE_ARM926,
+        /// <summary>
+        /// ARM946 CPU type
+        /// </summary>
+        ARM946 = uc_mode.UC_MODE_ARM946,
+        /// <summary>
+        /// ARM1176 CPU type
+        /// </summary>
+        ARM1176 = uc_mode.UC_MODE_ARM1176,
+
+        /// <summary>
         /// MicroMips mode.
         /// </summary>
         MIPSMicro = uc_mode.UC_MODE_MICRO,
