@@ -1028,5 +1028,41 @@
             get { return Read(113); }
             set { Write(113, value); }
         }
+
+        /// <summary>
+        /// Gets or sets the value of IPSR register.
+        /// </summary>
+        public long IPSR
+        {
+            get { return Read(114); }
+            set { Write(114, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of MSP register.
+        /// </summary>
+        public long MSP
+        {
+            get { return Read(115); }
+            set { Write(115, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of PSP register.
+        /// </summary>
+        public long PSP
+        {
+            get { return Read(116); }
+            set { Write(116, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the value of CONTROL register.
+        /// </summary>
+        public long CONTROL
+        {
+            get { return Read(117); }
+            set { Write(117, value); }
+        }
     }
 }
