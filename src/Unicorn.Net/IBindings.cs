@@ -45,6 +45,7 @@ namespace Unicorn
         void RegRead(IntPtr uc, int regId, ref ulong value);
         void RegRead(IntPtr uc, int regId, ref float value);
         void RegRead(IntPtr uc, int regId, ref double value);
+        void RegRead(IntPtr uc, int regId, ref NeonRegister value);
 
         void RegWrite(IntPtr uc, int regId, IntPtr value);
         void RegWrite(IntPtr uc, int regId, byte[] value);
@@ -54,5 +55,6 @@ namespace Unicorn
         void RegWrite(IntPtr uc, int regId, ref ulong value);
         void RegWrite(IntPtr uc, int regId, ref float value);
         void RegWrite(IntPtr uc, int regId, ref double value);
+        void RegWrite(IntPtr uc, int regId, ref NeonRegister value);
     }
 }

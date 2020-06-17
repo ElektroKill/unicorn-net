@@ -231,7 +231,13 @@ namespace Unicorn
         internal void RegRead(int regId, ref int value)
             => Bindings.RegRead(Handle, regId, ref value);
 
+        internal void RegRead(int regId, ref uint value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
         internal void RegRead(int regId, ref long value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
+        internal void RegRead(int regId, ref ulong value)
             => Bindings.RegRead(Handle, regId, ref value);
 
         internal void RegRead(int regId, ref float value)
@@ -240,16 +246,28 @@ namespace Unicorn
         internal void RegRead(int regId, ref double value)
             => Bindings.RegRead(Handle, regId, ref value);
 
+        internal void RegRead(int regId, ref NeonRegister value)
+            => Bindings.RegRead(Handle, regId, ref value);
+
         internal void RegWrite(int regId, ref int value)
             => Bindings.RegWrite(Handle, regId, ref value);
 
+        internal void RegWrite(int regId, ref uint value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
         internal void RegWrite(int regId, ref long value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
+        internal void RegWrite(int regId, ref ulong value)
             => Bindings.RegWrite(Handle, regId, ref value);
 
         internal void RegWrite(int regId, ref float value)
             => Bindings.RegWrite(Handle, regId, ref value);
 
         internal void RegWrite(int regId, ref double value)
+            => Bindings.RegWrite(Handle, regId, ref value);
+
+        internal void RegWrite(int regId, ref NeonRegister value)
             => Bindings.RegWrite(Handle, regId, ref value);
 
         internal void ThrowIfDisposed()

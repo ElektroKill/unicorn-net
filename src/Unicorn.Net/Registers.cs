@@ -33,6 +33,51 @@ namespace Unicorn
             return value;
         }
 
+        public int ReadInt(int registerId)
+        {
+            int value = 0;
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return value;
+        }
+
+        public uint ReadUInt(int registerId)
+        {
+            uint value = 0;
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return value;
+        }
+
+        public float ReadFloat(int registerId)
+        {
+            float value = 0;
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return value;
+        }
+
+        public double ReadDouble(int registerId)
+        {
+            double value = 0;
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return value;
+        }
+
+        public NeonRegister ReadNeon(int registerId)
+        {
+            NeonRegister value = new NeonRegister();
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return value;
+        }
+
         public void Read(int registerId, ref int value)
         {
             _emulator.ThrowIfDisposed();
@@ -89,6 +134,12 @@ namespace Unicorn
         }
 
         public void Write(int registerId, double value)
+        {
+            _emulator.ThrowIfDisposed();
+            _emulator.RegWrite(registerId, ref value);
+        }
+
+        public void Write(int registerId, NeonRegister value)
         {
             _emulator.ThrowIfDisposed();
             _emulator.RegWrite(registerId, ref value);

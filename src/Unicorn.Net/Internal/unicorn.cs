@@ -58,6 +58,9 @@ namespace Unicorn.Internal
         public static extern uc_err uc_reg_read(IntPtr uc, int regid, ref double value);
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
+        public static extern uc_err uc_reg_read(IntPtr uc, int regid, ref NeonRegister value);
+
+        [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_write(IntPtr uc, int regid, IntPtr value);
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
@@ -80,6 +83,9 @@ namespace Unicorn.Internal
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_write(IntPtr uc, int regid, ref double value);
+
+        [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
+        public static extern uc_err uc_reg_write(IntPtr uc, int regid, ref NeonRegister value);
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_read_batch(IntPtr uc, int[] regid, IntPtr[] vals, int count);

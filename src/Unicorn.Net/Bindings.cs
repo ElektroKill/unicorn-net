@@ -136,6 +136,8 @@ namespace Unicorn
 
         public void RegRead(IntPtr uc, int regId, ref double value)
             => ThrowIfError(uc_reg_read(uc, regId, ref value));
+        public void RegRead(IntPtr uc, int regId, ref NeonRegister value)
+            => ThrowIfError(uc_reg_read(uc, regId, ref value));
 
 
         public void RegWrite(IntPtr uc, int regId, IntPtr value)
@@ -161,6 +163,8 @@ namespace Unicorn
 
         public void RegWrite(IntPtr uc, int regId, ref double value)
             => ThrowIfError(uc_reg_write(uc, regId, ref value));
-            
+
+        public void RegWrite(IntPtr uc, int regId, ref NeonRegister value)
+            => ThrowIfError(uc_reg_write(uc, regId, ref value));
     }
 }
