@@ -33,6 +33,15 @@ namespace Unicorn
             return value;
         }
 
+        public byte ReadByte(int registerId)
+        {
+            uint value = 0;
+
+            _emulator.ThrowIfDisposed();
+            _emulator.RegRead(registerId, ref value);
+            return (byte)(value & 0xFF);
+        }
+
         public int ReadInt(int registerId)
         {
             int value = 0;
@@ -99,6 +108,13 @@ namespace Unicorn
         {
             _emulator.ThrowIfDisposed();
             _emulator.RegRead(registerId, ref value);
+        }
+
+        public void Write(int registerId, byte value)
+        {
+            uint val = 0xFFU & value;
+            _emulator.ThrowIfDisposed();
+            _emulator.RegWrite(registerId, ref val);
         }
 
         /// <summary>

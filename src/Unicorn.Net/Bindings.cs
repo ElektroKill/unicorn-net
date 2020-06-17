@@ -166,5 +166,12 @@ namespace Unicorn
 
         public void RegWrite(IntPtr uc, int regId, ref NeonRegister value)
             => ThrowIfError(uc_reg_write(uc, regId, ref value));
+
+
+
+        public void RegWrite(IntPtr uc, int regId, ref byte value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

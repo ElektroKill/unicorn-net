@@ -38,6 +38,8 @@ namespace Unicorn.Internal
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_read(IntPtr uc, int regid, byte[] value);
+        [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
+        public static extern uc_err uc_reg_read(IntPtr uc, int regid, ref byte value);
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_read(IntPtr uc, int regid, ref int value);
@@ -65,6 +67,8 @@ namespace Unicorn.Internal
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_write(IntPtr uc, int regid, byte[] value);
+        [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
+        public static extern uc_err uc_reg_write(IntPtr uc, int regid, ref byte value);
 
         [DllImport(UNICORN_LIB, CallingConvention = CallingConvention.Cdecl)]
         public static extern uc_err uc_reg_write(IntPtr uc, int regid, ref int value);

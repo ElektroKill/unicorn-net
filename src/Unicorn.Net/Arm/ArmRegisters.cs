@@ -15,81 +15,81 @@
         /// <summary>
         /// Gets or sets the value of APSR register.
         /// </summary>
-        public long APSR
+        public uint APSR
         {
-            get { return Read(1); }
+            get { return ReadUInt(1); }
             set { Write(1, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of APSR_NZCV register.
         /// </summary>
-        public long APSR_NZCV
+        public uint APSR_NZCV
         {
-            get { return Read(2); }
+            get { return ReadUInt(2); }
             set { Write(2, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of CPSR register.
         /// </summary>
-        public long CPSR
+        public uint CPSR
         {
-            get { return Read(3); }
+            get { return ReadUInt(3); }
             set { Write(3, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of FPEXC register.
         /// </summary>
-        public long FPEXC
+        public uint FPEXC
         {
-            get { return Read(4); }
+            get { return ReadUInt(4); }
             set { Write(4, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of FPINST register.
         /// </summary>
-        public long FPINST
+        public uint FPINST
         {
-            get { return Read(5); }
+            get { return ReadUInt(5); }
             set { Write(5, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of FPSCR register.
         /// </summary>
-        public long FPSCR
+        public uint FPSCR
         {
-            get { return Read(6); }
+            get { return ReadUInt(6); }
             set { Write(6, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of FPSCR_NZCV register.
         /// </summary>
-        public long FPSCR_NZCV
+        public uint FPSCR_NZCV
         {
-            get { return Read(7); }
+            get { return ReadUInt(7); }
             set { Write(7, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of FPSID register.
         /// </summary>
-        public long FPSID
+        public uint FPSID
         {
-            get { return Read(8); }
+            get { return ReadUInt(8); }
             set { Write(8, value); }
         }
 
         /// <summary>
         /// Gets or sets the value of ITSTATE register.
         /// </summary>
-        public long ITSTATE
+        public byte ITSTATE
         {
-            get { return Read(9); }
+            get { return ReadByte(9); }
             set { Write(9, value); }
         }
 
