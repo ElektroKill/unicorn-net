@@ -186,14 +186,14 @@ namespace Unicorn
                 callback(Emulator, userToken);
             });
 
-            return AddInternal(wrapper, begin, end);
+            return AddInvalidInternal(wrapper, begin, end);
         }
 
-        private HookHandle AddInternal(Delegate callback, ulong begin, ulong end)
+        private HookHandle AddInvalidInternal(Delegate callback, ulong begin, ulong end)
         {
             var ptr = IntPtr.Zero;
             var callbackPtr = Marshal.GetFunctionPointerForDelegate(callback);
-            Emulator.Bindings.HookAdd(Emulator.Handle, ref ptr, UnicornHookType.Instructions, callbackPtr, IntPtr.Zero, begin, end);
+            Emulator.Bindings.HookAdd(Emulator.Handle, ref ptr, UnicornHookType.InvalidInstruction, callbackPtr, IntPtr.Zero, begin, end);
 
             var handle = new HookHandle(ptr, callback);
             Handles.Add(handle);

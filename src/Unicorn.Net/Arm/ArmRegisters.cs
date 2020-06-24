@@ -123,9 +123,9 @@
         /// <summary>
         /// Gets or sets the value of SPSR register.
         /// </summary>
-        public int SPSR
+        public uint SPSR
         {
-            get { return ReadInt(13); }
+            get { return ReadUInt(13); }
             set { Write(13, value); }
         }
 

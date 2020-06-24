@@ -68,5 +68,10 @@ namespace Unicorn
         /// Successful memory reads.
         /// </summary>
         MemReadAfter = uc_hook_type.UC_HOOK_MEM_READ_AFTER,
+
+        /// <summary>
+        /// Invalid Instruction
+        /// </summary>
+        InvalidInstruction = uc_hook_type.UC_HOOK_INSN_INVALID
     }
 }
