@@ -14,7 +14,7 @@ namespace Unicorn
     /// <param name="size">Size of data being read or written.</param>
     /// <param name="value">Data being written to memory; irrelevant if <paramref name="type"/> is <see cref="MemoryType.Read"/>.</param>
     /// <param name="userToken">Object associated with the callback.</param>
-    public delegate void MemoryHookCallback(Emulator emulator, MemoryType type, ulong address, int size, ulong value, object userToken);
+    public delegate void MemoryHookCallback(Emulator emulator, MemoryType type, ulong address, int size, long value, object userToken);
 
     /// <summary>
     /// Callback for handling invalid memory accesses.
@@ -26,7 +26,7 @@ namespace Unicorn
     /// <param name="value">Data being written to memory; irrelevant if <paramref name="type"/> is <see cref="MemoryType.Read"/>.</param>
     /// <param name="userToken">Object associated with the callback.</param>
     /// <returns>Return <c>true</c> to continue execution; otherwise <c>false</c> to stop execution.</returns>
-    public delegate bool MemoryEventHookCallback(Emulator emulator, MemoryType type, ulong address, int size, ulong value, object userToken);
+    public delegate bool MemoryEventHookCallback(Emulator emulator, MemoryType type, ulong address, int size, long value, object userToken);
 
     /// <summary>
     /// Represents hooks for memory of an <see cref="Emulator"/>.

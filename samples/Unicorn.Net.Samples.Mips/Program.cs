@@ -22,7 +22,7 @@ namespace Unicorn.Net.Samples.Mips
                 };
 
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
-                emulator.Memory.Write(addr, mipscode, mipscode.Length);
+                emulator.Memory.Write(addr, mipscode, (ulong)mipscode.Length);
 
                 emulator.Registers.AT = 0x6789;
                 // or
@@ -52,7 +52,7 @@ namespace Unicorn.Net.Samples.Mips
                 };
 
                 emulator.Memory.Map(addr, 2 * 1024 * 1024, MemoryPermissions.All);
-                emulator.Memory.Write(addr, mipscode, mipscode.Length);
+                emulator.Memory.Write(addr, mipscode, (uint)mipscode.Length);
 
                 emulator.Registers.AT = 0x6789;
                 // or
@@ -73,12 +73,12 @@ namespace Unicorn.Net.Samples.Mips
             TestMipsEl();
         }
 
-        private static void BlockHook(Emulator emulator, ulong address, int size, object userToken)
+        private static void BlockHook(Emulator emulator, ulong address, uint size, object userToken)
         {
             Console.WriteLine($">>> Tracing basic block at 0x{address.ToString("x2")}, block size = 0x{size.ToString("x2")}");
         }
 
-        private static void CodeHook(Emulator emulator, ulong address, int size, object userToken)
+        private static void CodeHook(Emulator emulator, ulong address, uint size, object userToken)
         {
             Console.WriteLine($">>> Tracing instruction at 0x{address.ToString("x2")}, instruction size = 0x{size.ToString("x2")}");
         }

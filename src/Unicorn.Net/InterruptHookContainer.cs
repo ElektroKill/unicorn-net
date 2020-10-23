@@ -11,7 +11,7 @@ namespace Unicorn
     /// <param name="emulator"><see cref="Emulator"/> which raised the callback.</param>
     /// <param name="into">Interrupt number.</param>
     /// <param name="userToken">Object associated with the callback.</param>
-    public delegate void InterruptHookCallback(Emulator emulator, int into, object userToken);
+    public delegate void InterruptHookCallback(Emulator emulator, uint into, object userToken);
 
     /// <summary>
     /// Represents hooks for interrupts of an <see cref="Emulator"/>.

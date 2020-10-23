@@ -7,6 +7,14 @@ using Unicorn.X86;
 namespace Unicorn
 {
     /// <summary>
+    /// Callback function for tracing invalid instructions
+    /// </summary>
+    /// <param name="emulator"><see cref="Emulator"/> which raised the callback.</param>
+    /// <param name="userToken">Object associated with the callback.</param>
+    /// <returns></returns>
+    public delegate bool InstructionInvalidHookCallback(Emulator emulator, object userToken);
+
+    /// <summary>
     /// Callback for tracing <see cref="X86Instructions.IN"/>.
     /// </summary>
     /// <param name="emulator"><see cref="Emulator"/> which raised the callback.</param>
@@ -14,7 +22,7 @@ namespace Unicorn
     /// <param name="size">Data size read from <paramref name="port"/>.</param>
     /// <param name="userToken">Object associated with the callback.</param>
     /// <returns>Data read.</returns>
-    public delegate int InstructionInHookCallback(Emulator emulator, int port, int size, object userToken);
+    public delegate uint InstructionInHookCallback(Emulator emulator, uint port, int size, object userToken);
 
     /// <summary>
     /// Callback for tracing <see cref="X86Instructions.OUT"/>.
@@ -24,7 +32,7 @@ namespace Unicorn
     /// <param name="size">Data size written to <paramref name="port"/>.</param>
     /// <param name="value">Data to be written to <paramref name="port"/>.</param>
     /// <param name="userToken">Object associated with the callback.</param>
-    public delegate void InstructionOutHookCallback(Emulator emulator, int port, int size, int value, object userToken);
+    public delegate void InstructionOutHookCallback(Emulator emulator, uint port, int size, uint value, object userToken);
 
     /// <summary>
     /// Represents hooks for instructions of an <see cref="Emulator"/>.
@@ -108,6 +116,22 @@ namespace Unicorn
         }
 
         /// <summary>
+        /// Adds a hook invalid instructions exceptions.
+        /// </summary>
+        /// <param name="callback"><see cref="InstructionInvalidHookCallback"/> to add.</param>
+        /// <param name="userToken">Object associated with the callback.</param>
+        /// <returns>A <see cref="HookHandle"/> which represents the hook.</returns>
+        public HookHandle Add(InstructionInvalidHookCallback callback, object userToken)
+        {
+            Emulator.ThrowIfDisposed();
+
+            if (callback == null)
+                throw new ArgumentNullException(nameof(callback));
+
+            return AddInvalidInternal(callback, 1, 0, userToken);
+        }
+
+        /// <summary>
         /// Adds a <see cref="InstructionOutHookCallback"/> to the <see cref="Emulator"/> with the specified <see cref="Instruction"/> and user token which
         /// is called when the hook is triggered within the specified start address and end address.
         /// </summary>
@@ -152,6 +176,29 @@ namespace Unicorn
             });
 
             return AddInternal(wrapper, begin, end, instruction);
+        }
+
+        private HookHandle AddInvalidInternal(InstructionInvalidHookCallback callback, ulong begin, ulong end, object userToken)
+        {
+            var wrapper = new uc_cb_hookinsn_invalid((uc, user_data) =>
+            {
+                Debug.Assert(uc == Emulator.Handle);
+                callback(Emulator, userToken);
+            });
+
+            return AddInvalidInternal(wrapper, begin, end);
+        }
+
+        private HookHandle AddInvalidInternal(Delegate callback, ulong begin, ulong end)
+        {
+            var ptr = IntPtr.Zero;
+            var callbackPtr = Marshal.GetFunctionPointerForDelegate(callback);
+            Emulator.Bindings.HookAdd(Emulator.Handle, ref ptr, UnicornHookType.InvalidInstruction, callbackPtr, IntPtr.Zero, begin, end);
+
+            var handle = new HookHandle(ptr, callback);
+            Handles.Add(handle);
+
+            return handle;
         }
 
         private HookHandle AddInternal(Delegate callback, ulong begin, ulong end, Instruction inst)
